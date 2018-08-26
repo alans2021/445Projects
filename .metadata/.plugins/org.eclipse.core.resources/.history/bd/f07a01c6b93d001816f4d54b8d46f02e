@@ -1,0 +1,113 @@
+package MyTreePackage;
+
+public class ComparableBinaryTree <T extends Comparable<?super T>> extends BinaryTree<T> implements ComparableTreeInterface<T>
+{
+	
+	
+	@Override
+	public T getMax() {
+		BinaryNode<T> max = this.getRootNode();
+		if(max == null)
+			return null;
+		
+		T data = recMax(max.getLeftChild(), max.getData());
+		data = recMax(max.getRightChild(), data);
+		return data;
+	}
+	
+	private T recMax(BinaryNode<T> node, T max)
+	{
+		if(node != null)
+		{
+			if(node.getData().compareTo(max) > 0)
+				max = node.getData();
+			max = recMax(node.getLeftChild(), max);
+			max = recMax(node.getRightChild(), max);
+			return max;
+		}
+		
+		else
+			return max;
+	}
+
+	@Override
+	public T getMin() {
+		BinaryNode<T> min = this.getRootNode();
+		if(min == null)
+			return null;
+		
+		T data = recMin(min.getLeftChild(), min.getData());
+		data = recMin(min.getRightChild(), data);
+		return data;
+	}
+	
+	private T recMin(BinaryNode<T> node, T min)
+	{
+		if(node != null)
+		{
+			if(node.getData().compareTo(min) < 0)
+				min = node.getData();
+			min = recMin(node.getLeftChild(), min);
+			min = recMin(node.getRightChild(), min);
+			return min;
+		}
+		
+		else
+			return min;
+	}
+
+	@Override
+	public boolean isBST() 
+	{
+		BinaryNode<T> node = this.getRootNode();
+		return recBST(node);
+	}
+	
+	private boolean recBST(BinaryNode<T> node)
+	{
+		if(node != null)
+		{
+			BinaryNode<T> leftC = node.getLeftChild();
+			BinaryNode<T> rightC = node.getRightChild();
+			if(leftC == null)
+			{
+				if(rightC == null)
+					return true;
+				else if(rightC.getData().compareTo(node.getData()) > 0)
+					return recBST(rightC);
+				else
+					return false;
+			}
+			else if(rightC == null)
+			{
+				if(leftC.getData().compareTo(node.getData()) < 0)
+					return recBST(leftC);
+				else
+					return false;
+			}
+			else if( (leftC.getData().compareTo(node.getData()) < 0) && 
+				(rightC.getData().compareTo(node.getData()) > 0) )
+				return ( recBST(leftC) && recBST(rightC) );
+			else
+				return false;
+			
+		}
+		else
+			return true;
+	}
+
+	@Override
+	public T get(int i) {
+		if(i < 0 || i >= this.getNumberOfNodes())
+			throw new IndexOutOfBoundsException();
+		
+		return null;
+	}
+
+	@Override
+	public int rank(T data) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

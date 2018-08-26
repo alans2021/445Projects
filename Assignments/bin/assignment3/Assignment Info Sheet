@@ -1,0 +1,28 @@
+Name: Alan Shen Assignment #: 3
+
+Lecture Day and Time: Tuesday, Thursday from 9:30 - 10:45 A.M.
+
+Recitation Day and Time: Wednesday, 11:00 A.M.
+
+Program Due Date: March 21st, 2018
+
+Handed in Date: March 21st, 2018 
+
+Source code (.java) file name(s):
+Assig3.java, MyStringBuilder2.java
+
+Other files:
+None
+
+Input / output file name(s) (if applicable): N/A
+
+Does your program compile without error?: Yes
+
+If not, what is/are the error(s)?: N/A
+
+Does your program run without error?: No
+
+If not, what is/are the error(s) and which parts of your program run correctly?:
+Two output statements for the regMatch method are incorrect compared to the sample output.
+
+Additional comments (including problems and extra credit):

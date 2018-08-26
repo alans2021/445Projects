@@ -1,0 +1,29 @@
+Name: Alan Shen Assignment #: 2
+
+Lecture Day and Time: Tuesday, Thursday from 9:30 - 10:45 A.M.
+
+Recitation Day and Time: Wednesday, 11:00 A.M.
+
+Program Due Date: February 22nd, 2018
+
+Handed in Date: February 22nd, 2018 
+
+Source code (.java) file name(s):
+Assig2.java, Assig2B.java, MyStringBuilder.java
+
+Other files:
+Writeup.doc
+
+Input / output file name(s) (if applicable): N/A
+
+Does your program compile without error?: Yes
+
+If not, what is/are the error(s)?: N/A
+
+Does your program run without error?: Yes
+
+If not, what is/are the error(s) and which parts of your program run correctly?:
+N/A
+
+Additional comments (including problems and extra credit):
+Extra Credit done where I measured the efficiency of the indexOf methods for each class

@@ -1,0 +1,580 @@
+package assignment3;
+  
+public class MyStringBuilder2
+{
+	private CNode firstC;	// reference to front of list.  This reference is necessary
+							// to keep track of the list
+	private CNode lastC; 	// reference to last node of list.  This reference is
+							// necessary to improve the efficiency of the append()
+							// method
+	private int length;  	// number of characters in the list
+
+
+	// Create a new MyStringBuilder2 initialized with the chars in String s
+	public MyStringBuilder2(String s)
+	{
+		if(s != null && s.length() > 0)
+			makeBuilder(s, 0);
+		else
+		{
+			length = 0;
+			firstC = null;
+			lastC = null;
+		}
+	}
+
+	// Create a new MyStringBuilder2 initialized with the chars in array s
+	public MyStringBuilder2(char [] s)
+	{
+		String str = new String(s);
+		if(str != null && str.length() > 0)
+			makeBuilder(str, 0);
+		else
+		{
+			length = 0;
+			firstC = null;
+			lastC = null;
+		}
+	}
+	
+	private void makeBuilder(String s, int pos)
+	{
+		if(pos < s.length() - 1)
+		{
+			makeBuilder(s, pos + 1);
+			firstC = new CNode(s.charAt(pos), firstC);
+			length++;
+		}
+		else if(pos == s.length() - 1)
+		{
+			firstC = new CNode(s.charAt(pos));
+			lastC = firstC;
+			length = 1;
+		}
+		else
+		{
+			length = 0;
+			firstC = null;
+			lastC = null;
+		}
+	}
+
+	// Create a new empty MyStringBuilder2
+	public MyStringBuilder2()
+	{
+		length = 0;
+		firstC = null;
+		lastC = null;
+	}
+
+	// Append MyStringBuilder2 b to the end of the current MyStringBuilder2, and
+	// return the current MyStringBuilder2.  Be careful for special cases!
+	public MyStringBuilder2 append(MyStringBuilder2 b)
+	{
+		char[] newchars = b.toString().toCharArray();
+		if(newchars.length == 0)
+			return this;
+		else
+		{
+			recAppend(lastC, newchars, 0);
+			return this;
+		}
+	}
+
+
+	// Append String s to the end of the current MyStringBuilder2, and return
+	// the current MyStringBuilder2.  Be care ful for special cases!
+	public MyStringBuilder2 append(String s)
+	{
+		char[] newchars = s.toCharArray();
+		if(newchars.length == 0)
+			return this;
+		else
+		{
+			recAppend(lastC, newchars, 0);
+			return this;
+		}
+	}
+
+	// Append char array c to the end of the current MyStringBuilder2, and
+	// return the current MyStringBuilder2.  Be careful for special cases!
+	public MyStringBuilder2 append(char [] c)
+	{
+		if(c.length == 0)
+			return this;
+		else
+		{
+			recAppend(lastC, c, 0);
+			return this;
+		}
+	}
+
+	// Append char c to the end of the current MyStringBuilder2, and
+	// return the current MyStringBuilder2.  Be careful for special cases!
+	public MyStringBuilder2 append(char c)
+	{
+		CNode newNode = new CNode(c);
+		if(length == 0)
+		{
+			lastC = newNode;
+			firstC = lastC;
+		}
+		else
+		{
+			lastC.next = newNode;
+			lastC = lastC.next;
+		}
+		length++;
+		return this;
+	}
+	
+	private void recAppend(CNode prevNode, char[] c, int pos)
+	{
+		if(pos < c.length - 1)
+		{
+			CNode newNode = new CNode(c[pos]);
+			if(length == 0) //Special case; sets first to be the first of new character added
+				firstC = newNode;
+			else
+				prevNode.next = newNode; //Add reference to new character
+			length++;
+			recAppend(newNode, c, pos + 1);
+		}
+		
+		else
+		{
+			CNode newNode = new CNode(c[pos]);
+			prevNode.next = newNode;
+			lastC = newNode;
+			length++;
+		}
+	}
+
+	// Return the character at location "index" in the current MyStringBuilder2.
+	// If index is invalid, throw an IndexOutOfBoundsException.
+	public char charAt(int index)
+	{
+		if(index < 0 || index >= length)
+			throw new IndexOutOfBoundsException();
+		return recGetChar(firstC, 0, index);
+	}
+	
+	private char recGetChar(CNode curr, int start, int end){
+		if(start < end)
+			return recGetChar(curr.next, start + 1, end);
+		else
+			return curr.data;
+	}
+	
+	public MyStringBuilder2 delete(int start, int end)
+	{
+		if(start < 0 || end <= start)
+			return this;
+		if(end > length) //Set end to equal length if greater to prevent null pointer exceptions
+			end = length;
+		if(end - start == length)
+		{
+			firstC = null;
+			lastC = null;
+			length = 0;
+			return this;
+		}
+			
+		CNode prevNode = getNodeAt(firstC, 0, start); //Get prevNode at index right before node to be deleted
+		deleteRec(prevNode, start, end);
+		return this;
+	}
+	
+	private void deleteRec(CNode curr, int start, int end)
+	{
+		if(curr == null && start < end) //Accounts for if deleting the front
+		{
+			firstC = firstC.next; //Keep moving the first node
+			length--;
+			deleteRec(curr, start + 1, end);
+		}
+		else if(start < end)
+		{
+			curr.next = curr.next.next; //next reference of previous node goes to one after next
+			if(curr.next == null) //If next references null, we know that node is lastC
+				lastC = curr;
+			length--;
+			deleteRec(curr, start + 1, end);
+		}
+			
+	}
+
+	public MyStringBuilder2 deleteCharAt(int index)
+	{
+		if(index >= length || index < 0)
+			return this;
+		
+		CNode prevNode = getNodeAt(firstC, 0, index);
+		if(prevNode == null) //If deleting index 0, change first node
+		{
+			if(length == 1)
+			{
+				length = 0;
+				return null;
+			}
+			else
+				firstC = firstC.next;
+		}
+		else
+		{
+			prevNode.next = prevNode.next.next; //next reference is now one after
+			if(prevNode.next == null)
+				lastC = prevNode;
+		}
+		length--;
+		return this;
+	}
+	
+	public int indexOf(String str)
+	{
+		char[] findchars = str.toCharArray();
+		int index = recIndex(firstC, findchars, 0, 0);
+		return index;
+	}
+	
+	private int recIndex(CNode curr, char[] c, int current, int loc)
+	{
+		if(loc == c.length) //Means whole string has been found in MyStringBuilder2, current - loc is the index
+			return current - loc;
+		else if(current >= length) //String not found
+			return -1;
+		
+		if(c[loc] == curr.data) //Keep going through the character array and check matches
+			return recIndex(curr.next, c, current + 1, loc + 1);
+		else //Resets loc, which is index of char[] c, to 0, start over
+			return recIndex(curr.next, c, current + 1, 0);
+		
+	}
+
+	public MyStringBuilder2 insert(int offset, String str)
+	{
+		if(offset < 0 || offset > length)
+			return this;
+		char[] newchars = str.toCharArray();
+		CNode prevNode = getNodeAt(firstC, 0, offset);
+		CNode nextNode;
+		if(prevNode == null)
+			nextNode = firstC;
+		else
+			nextNode = prevNode.next;
+		recIns(prevNode, nextNode, newchars, 0);
+		return this;
+	}
+
+	public MyStringBuilder2 insert(int offset, char c)
+	{
+		if(offset < 0 || offset > length)
+			return this;
+		CNode prevNode = getNodeAt(firstC, 0, offset);
+		CNode newNode = new CNode(c);
+		if(prevNode == null)
+		{	
+			newNode.next = firstC; //Accounts for inserting at beginning
+			firstC = newNode;
+		}
+		else
+		{
+			CNode nextNode = prevNode.next;
+			prevNode.next = newNode;
+			if(nextNode == null) //Accounts for if inserting at end
+				lastC = newNode;
+			else
+				newNode.next = nextNode;
+		}
+		length++;
+		return this;
+	}
+
+	public MyStringBuilder2 insert(int offset, char [] c)
+	{
+		if(offset < 0 || offset >= length)
+			return this;
+		CNode prevNode = getNodeAt(firstC, 0, offset); //Find character right before index where insert is
+		CNode nextNode;
+		if(prevNode == null)
+			nextNode = firstC; 
+		else
+			nextNode = prevNode.next;
+		recIns(prevNode, nextNode, c, 0);
+		return this;
+	}
+	
+	private void recIns(CNode curr, CNode nextN, char[] c, int loc)
+	{
+		if(curr == null) //sets firstC to be the first new character in the array
+		{
+			firstC = new CNode(c[loc]);
+			length++;
+			recIns(firstC, nextN, c, loc + 1);
+		}
+		else if(loc < c.length - 1) //Keeps making references to next element in character array
+		{
+			curr.next = new CNode(c[loc]);
+			length++;
+			recIns(curr.next, nextN, c, loc + 1);
+		}
+		else
+		{
+			curr.next = new CNode(c[loc]); //.next refers to final element of character array
+			if(nextN != null) 
+				curr.next.next = nextN; //reference last character of inserted array to the next or original
+			else
+				lastC = curr.next; //Means last character of inserted array is lastC
+			length++;
+		}
+	}
+
+	// Return the length of the current MyStringBuilder2
+	public int length()
+	{
+		return length;
+	}
+
+	public MyStringBuilder2 replace(int start, int end, String str)
+	{
+		if(start < 0 || start >= length || end <= start)
+			return this;
+		if(end > length)
+			end = length;
+		char[] newchars = str.toCharArray();
+		
+		CNode prevNode = getNodeAt(firstC, 0, start); //Find previous node
+		deleteRec(prevNode, start, end); //Calls recursive delete method
+		CNode nextNode;
+		
+		if(prevNode == null)
+			nextNode = firstC;
+		else
+			nextNode = prevNode.next;
+		recIns(prevNode, nextNode, newchars, 0); //Calls recursive insert method
+		return this;
+	}
+
+	// Reverse the characters in the current MyStringBuilder2 and then
+	// return the current MyStringBuilder2.
+	public MyStringBuilder2 reverse()
+	{
+		CNode prev = recReverse(firstC);
+		prev.next = null;
+		lastC = prev;
+		return this;
+	}
+	
+	private CNode recReverse(CNode curr)
+	{
+		CNode temp;
+		if(curr.next == null) //If next is null, means last node reached
+		{
+			firstC = curr; //set last node as first node
+			return curr;
+		}
+		else
+		{
+			temp = recReverse(curr.next); //return previous node, which used to be the next node
+			temp.next = curr; //set that previous.next to be curr
+			return curr; //return to original caller
+		}
+			
+	}
+	
+	// Return as a String the substring of characters from index "start" to
+	// index "end" - 1 within the current MyStringBuilder2
+	public String substring(int start, int end)
+	{
+		if(start < 0 || end <= start)
+			return "";
+		if(end > length)
+			end = length;
+		CNode prevNode = getNodeAt(firstC, 0, start);
+		char[] c = new char[end - start];
+		if(prevNode == null)
+			getSub(c, 0, firstC); //means start from the first node
+		else
+			getSub(c, 0, prevNode.next);
+		return new String(c);
+	}
+	
+	private void getSub(char[] c, int pos, CNode curr)
+	{
+		if(pos < c.length) //Keeps adding characters to the c[] array until array is filled
+		{
+			c[pos] = curr.data;
+			getSub(c, pos + 1, curr.next);
+		}
+	}
+
+	// Return the entire contents of the current MyStringBuilder2 as a String
+	public String toString()
+	{
+		char[] c = new char[length];
+		getString(c, 0, firstC);
+		return (new String(c));
+	}
+	
+	private void getString(char[] c, int pos, CNode curr)
+	{
+		if(curr != null)
+		{
+			c[pos] = curr.data;
+			getString(c, pos + 1, curr.next);
+		}
+	}
+	
+	private CNode getNodeAt(CNode curr, int start, int end) //Returns node at index end - 1
+	{
+		if(end <= 0 || start > end)
+			return null;
+		else if(start < end - 1)
+			return getNodeAt(curr.next, start + 1, end);
+		else
+			return curr;
+	}
+	
+
+	// Find and return the index within the current MyStringBuilder2 where
+	// String str LAST matches a sequence of characters within the current
+	// MyStringBuilder2.  If str does not match any sequence of characters
+	// within the current MyStringBuilder2, return -1.  Think carefully about
+	// what you need to do for this method before implementing it.  For some
+	// help with this see the Assignment 3 specifications.
+	public int lastIndexOf(String str)
+	{
+		char[] c = str.toCharArray();
+		int[] indices = recLastInd(firstC, c, 0, c.length - 1);
+		return indices[0];
+	}
+	
+	private int[] recLastInd(CNode curr, char[] c, int current, int loc)
+	{//current is index representing a node in the linked list, loc represents index of last character of c[] array
+		if(curr.next == null) //When the last node is reached
+		{
+			if(curr.data == c[loc]) //If data matches c[loc]
+			{
+				int[] arr = {current, loc}; //Return array of current index of list and index of c[] array
+				return arr;
+			}
+			else
+			{
+				int[] arr = {-1, loc}; //Returned index is -1
+				return arr;
+			}
+		}
+
+		int[] info = recLastInd(curr.next, c, current + 1, loc); //Recursive call to next node, with current incremented
+		int index = info[0];  
+		int pos = info[1];
+		
+		if(index == -1) //Indicates no matches
+		{
+			if(curr.data == c[pos]) //If data in node and array match
+				info[0] = current; //Update index
+			return info;
+		}
+		
+		else //Indicates potential match
+		{
+			if(pos == 0) //Means whole string has been found so just keep returning the array 
+				return info;
+
+			if(curr.data == c[pos - 1]) //If data still matches decremented index number of array
+			{
+				info[0] = current; //Return index of list
+				info[1] = pos - 1; //Return index of array
+			}
+			else //data doesn't match
+			{
+				info[0] = -1; //Index back to -1
+				info[1] = loc; //Index of array resets to loc
+			}
+			return info;
+		}
+	}
+	
+	// Find and return an array of MyStringBuilder2, where each MyStringBuilder2
+	// in the return array corresponds to a part of the match of the array of
+	// patterns in the argument.  If the overall match does not succeed, return
+	// null.  For much more detail on the requirements of this method, see the
+	// Assignment 3 specifications.
+	public MyStringBuilder2 [] regMatch(String [] pats)
+	{
+		MyStringBuilder2[] matches = new MyStringBuilder2[pats.length];
+		boolean b = recRegMatch(firstC, pats, 0, matches);
+		if(b == false)
+			return null;
+		return matches;
+	}
+	private boolean recRegMatch(CNode curr, String[] pats, int index, MyStringBuilder2[] res)
+	{
+		if(index == 0 && res[0] == null) //Indicates nothing matched yet
+		{
+			if(curr == null)
+				return false;
+			if(pats[0].indexOf(curr.data) == -1)
+				return recRegMatch(curr.next, pats, 0, res);
+			else
+			{
+				res[0] = new MyStringBuilder2();
+				res[0] = res[0].append(curr.data);
+				return recRegMatch(curr.next, pats, 0, res);
+			}
+		}
+		
+		else if(index < pats.length && res[index] != null) //Indicates something has been matched in the index
+		{
+			if(curr != null && pats[index].indexOf(curr.data) != -1)
+			{
+				res[index] = res[index].append(curr.data);
+				boolean b = recRegMatch(curr.next, pats, index, res);
+				if(!b)
+					return recRegMatch(curr, pats, index + 1, res);
+				return b;
+			}
+			else if(index == pats.length - 1)
+				return true;
+			else
+				return recRegMatch(curr, pats, index + 1, res);
+		}
+		
+		else
+		{
+			if(curr != null && pats[index].indexOf(curr.data) != -1)
+			{
+				res[index] = new MyStringBuilder2();
+				res[index] = res[index].append(curr.data);
+				return recRegMatch(curr.next, pats, index, res);
+			}
+			else
+			{
+				int reslength = res[index - 1].length();
+				res[index - 1] = res[index - 1].deleteCharAt(reslength - 1);
+				return false;
+			}
+		}
+	}
+	
+	// You must use this inner class exactly as specified below.  Note that
+	// since it is an inner class, the MyStringBuilder2 class MAY access the
+	// data and next fields directly.
+	private class CNode
+	{
+		private char data;
+		private CNode next;
+
+		public CNode(char c)
+		{
+			data = c;
+			next = null;
+		}
+
+		public CNode(char c, CNode n)
+		{
+			data = c;
+			next = n;
+		}
+	}
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;CS445Rec1.java&apos; to &apos;Recitation/src/Rec1&apos;&#x0D;&#x0A;- Original project: &apos;Recitation&apos;&#x0D;&#x0A;- Destination element: &apos;Recitation/src/Rec1&apos;&#x0D;&#x0A;- Original element: &apos;CS445Rec1.java&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="/src&lt;Rec1" element1="/src&lt;{CS445Rec1.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1516205290601" units="1" version="1.0"/>
+</session>

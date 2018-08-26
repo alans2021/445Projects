@@ -1,0 +1,18 @@
+{
+  "C:\\Program Files\\Java\\jdk1.8.0_144\\jre\\lib\\rt.jar": {
+    "coordinate": "jre:jre:zip:call:1.0.0",
+    "location": "C:\\Program Files\\Java\\jdk1.8.0_144\\jre\\lib\\rt.jar",
+    "status": "RESOLVED",
+    "error": "Could not transfer artifact jre:jre:zip:call:1.0.0 from/to remote-models (http://download.eclipse.org/recommenders/models/kepler/): Error transferring file: null to http://download.eclipse.org/recommenders/models/kepler/jre/jre/1.0.0/jre-1.0.0-call.zip"
+  },
+  "C:\\Users\\alans\\Documents\\Freshman year\\Spring\\CS 0445\\Programming Works\\Assignments\\src": {
+    "location": "C:\\Users\\alans\\Documents\\Freshman year\\Spring\\CS 0445\\Programming Works\\Assignments\\src",
+    "status": "UNRESOLVED",
+    "error": "No class path info available for \u0027C:\\Users\\alans\\Documents\\Freshman year\\Spring\\CS 0445\\Programming Works\\Assignments\\src\u0027. Skipped."
+  },
+  "C:\\Users\\alans\\Documents\\Freshman year\\Spring\\CS 0445\\Programming Works\\Recitation\\src": {
+    "location": "C:\\Users\\alans\\Documents\\Freshman year\\Spring\\CS 0445\\Programming Works\\Recitation\\src",
+    "status": "UNRESOLVED",
+    "error": "No class path info available for \u0027C:\\Users\\alans\\Documents\\Freshman year\\Spring\\CS 0445\\Programming Works\\Recitation\\src\u0027. Skipped."
+  }
+}

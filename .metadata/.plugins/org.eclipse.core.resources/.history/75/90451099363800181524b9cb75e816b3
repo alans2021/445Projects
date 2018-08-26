@@ -1,0 +1,35 @@
+package MyTreePackage;
+
+public class ComparableBinaryTree <T extends Comparable<?super T>> extends BinaryTree<T> implements ComparableTreeInterface{
+
+	@Override
+	public T getMax() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public T getMin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isBST() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int rank(T data) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public T get(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
